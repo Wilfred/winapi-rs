@@ -4,6 +4,51 @@
 #![cfg(windows)]
 extern crate winapi;
 use winapi::*;
+
+ENUM!{enum TOKEN_INFORMATION_CLASS {
+    TokenUser = 1,
+    TokenGroups,
+    TokenPrivileges,
+    TokenOwner,
+    TokenPrimaryGroup,
+    TokenDefaultDacl,
+    TokenSource,
+    TokenType,
+    TokenImpersonationLevel,
+    TokenStatistics,
+    TokenRestrictedSids,
+    TokenSessionId,
+    TokenGroupsAndPrivileges,
+    TokenSessionReference,
+    TokenSandBoxInert,
+    TokenAuditPolicy,
+    TokenOrigin,
+    TokenElevationType,
+    TokenLinkedToken,
+    TokenElevation,
+    TokenHasRestrictions,
+    TokenAccessInformation,
+    TokenVirtualizationAllowed,
+    TokenVirtualizationEnabled,
+    TokenIntegrityLevel,
+    TokenUIAccess,
+    TokenMandatoryPolicy,
+    TokenLogonSid,
+    TokenIsAppContainer,
+    TokenCapabilities,
+    TokenAppContainerSid,
+    TokenAppContainerNumber,
+    TokenUserClaimAttributes,
+    TokenDeviceClaimAttributes,
+    TokenRestrictedUserClaimAttributes,
+    TokenRestrictedDeviceClaimAttributes,
+    TokenDeviceGroups,
+    TokenRestrictedDeviceGroups,
+    TokenSecurityAttributes,
+    TokenIsRestricted,
+    MaxTokenInfoClass,
+}}
+
 extern "system" {
     pub fn AbortSystemShutdownA(lpMachineName: LPCSTR) -> BOOL;
     pub fn AbortSystemShutdownW(lpMachineName: LPWSTR) -> BOOL;
@@ -454,7 +499,12 @@ extern "system" {
     // pub fn GetSidSubAuthorityCount();
     // pub fn GetStringConditionFromBinary();
     // pub fn GetThreadWaitChain();
-    // pub fn GetTokenInformation();
+    pub fn GetTokenInformation(TokenHandle: HANDLE,
+                               TokenInformationClass: TOKEN_INFORMATION_CLASS,
+                               TokenInformation: LPVOID,
+                               TokenInformationLength: DWORD,
+                               ReturnLength: PDWORD)
+                               -> BOOL;
     // pub fn GetTraceEnableFlags();
     // pub fn GetTraceEnableLevel();
     // pub fn GetTraceLoggerHandle();
