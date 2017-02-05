@@ -49,6 +49,23 @@ ENUM!{enum TOKEN_INFORMATION_CLASS {
     MaxTokenInfoClass,
 }}
 
+type PSID = *mut c_void;
+
+ENUM!{enum SID_NAME_USE {
+    SidTypeUser = 1,
+    SidTypeGroup,
+    SidTypeDomain,
+    SidTypeAlias,
+    SidTypeWellKnownGroup,
+    SidTypeDeletedAccount,
+    SidTypeInvalid,
+    SidTypeUnknown,
+    SidTypeComputer,
+    SidTypeLabel,
+}}
+
+type PSID_NAME_USE = *mut SID_NAME_USE;
+
 extern "system" {
     pub fn AbortSystemShutdownA(lpMachineName: LPCSTR) -> BOOL;
     pub fn AbortSystemShutdownW(lpMachineName: LPWSTR) -> BOOL;
@@ -550,8 +567,16 @@ extern "system" {
     // pub fn LogonUserW();
     // pub fn LookupAccountNameA();
     // pub fn LookupAccountNameW();
-    // pub fn LookupAccountSidA();
-    // pub fn LookupAccountSidW();
+    pub fn LookupAccountSidA(lpSystemName: LPCSTR, lpSid: PSID,
+                             lpName: LPSTR, cchName: LPDWORD,
+                             lpReferencedDomainName: LPSTR,
+                             cchReferencedDomainName: LPDWORD,
+                             peUse: PSID_NAME_USE) -> BOOL;
+    pub fn LookupAccountSidW(lpSystemName: LPCWSTR, lpSid: PSID,
+                             lpName: LPWSTR, cchName: LPDWORD,
+                             lpReferencedDomainName: LPWSTR,
+                             cchReferencedDomainName: LPDWORD,
+                             peUse: PSID_NAME_USE) -> BOOL;
     // pub fn LookupPrivilegeDisplayNameA();
     // pub fn LookupPrivilegeDisplayNameW();
     pub fn LookupPrivilegeNameA(
